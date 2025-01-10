@@ -410,28 +410,48 @@
             'Main Courses': [
                 {
                     id: 1,
-                    name: "Classic Burger",
-                    description: "Juicy beef patty with fresh lettuce, tomatoes, and our special sauce",
-                    price: 12.99,
-                    image: "images/burger.png",
+                    name: "Jollof Rice",
+                    description: "Authentic jollof rice with smoky, spicy, and savory flavors.",
+                    price: 5000,
+                    image: "images/jollof.png",
                     options: [
-                        { name: "Extra cheese", price: 1.50 },
-                        { name: "Bacon", price: 2.00 },
-                        { name: "Avocado", price: 1.50 }
+                        { name: "Boiled Egg", price: 500 },
+                        { name: "Fresh Onion", price: 200 },
+                        { name: "Red Stew", price: 500 }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Smoked Rice",
+                    description: "Classic smoky party rice.",
+                    price: 7000,
+                    image: "images/smoked.png",
+                    options: [
+                        { name: "Beef Suya", price: 3000},
+                        { name: "Spicy sauce", price: 500 }
                     ]
                 }
             ],
             'Appetizers': [
                 {
                     id: 2,
-                    name: "Crispy Wings",
-                    description: "Crispy chicken wings with your choice of sauce",
-                    price: 9.99,
-                    image: "images/wings.png",
+                    name: "Yam and Egg Sauce",
+                    description: "Boiled Yam covered in rich, spicy egg sauce",
+                    price: 5000,
+                    image: "images/yam_egg.png",
                     options: [
-                        { name: "Buffalo sauce", price: 0 },
-                        { name: "BBQ sauce", price: 0 },
-                        { name: "Extra sauce", price: 0.75 }
+                        { name: "Extra Pepper", price: 0 },
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Ewa Igoyin",
+                    description: "Tender honey beans and the sensational Ewa Agoyin sauce.",
+                    price: 5000,
+                    image: "images/ewa.png",
+                    options: [
+                        { name: "Extra Pepper", price: 0 },
+                        { name: "Bread", price: 1000}
                     ]
                 }
             ],
@@ -440,11 +460,11 @@
                     id: 3,
                     name: "Fresh Lemonade",
                     description: "Homemade lemonade with fresh mint",
-                    price: 3.99,
+                    price: 1500,
                     image: "images/lemonade.png",
                     options: [
-                        { name: "Extra mint", price: 0.50 },
-                        { name: "Add strawberry", price: 1.00 }
+                        { name: "Extra mint", price: 200 },
+                        { name: "Add strawberry", price: 500 }
                     ]
                 }
             ]
@@ -470,7 +490,7 @@
                                     <img src="${item.image}" alt="${item.name}">
                                     <div class="menu-item-info">
                                         <div class="menu-item-title">${item.name}</div>
-                                        <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                                        <div class="menu-item-price">₦${item.price.toFixed(2)}</div>
                                     </div>
                                 </div>
                             `).join('')}
@@ -516,13 +536,13 @@
                 <img src="${item.image}" alt="${item.name}">
                 <h2>${item.name}</h2>
                 <p>${item.description}</p>
-                <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                <div class="menu-item-price">₦${item.price.toFixed(2)}</div>
                 <div class="options-list">
                     ${item.options.map(option => `
                         <div class="option-item">
                             <input type="checkbox" id="option-${option.name}" data-price="${option.price}">
                             <label for="option-${option.name}">
-                                ${option.name} (+$${option.price.toFixed(2)})
+                                ${option.name} (+₦${option.price.toFixed(2)})
                             </label>
                         </div>
                     `).join('')}
@@ -576,7 +596,7 @@
                         `).join('')}
                     </div>
                     <div>
-                        $${(item.price + item.selectedOptions.reduce((sum, opt) => sum + opt.price, 0)).toFixed(2)}
+                        ₦${(item.price + item.selectedOptions.reduce((sum, opt) => sum + opt.price, 0)).toFixed(2)}
                     </div>
                 </div>
             `).join('');
@@ -606,14 +626,14 @@
                 const itemTotal = item.price + item.selectedOptions.reduce((sum, opt) => sum + opt.price, 0);
                 total += itemTotal;
                 
-                message += `${item.name} - $${itemTotal.toFixed(2)}\n`;
+                message += `${item.name} - ₦${itemTotal.toFixed(2)}\n`;
                 item.selectedOptions.forEach(option => {
                     message += `  + ${option.name}\n`;
                 });
                 message += '\n';
             });
             
-            message += `\nTotal: $${total.toFixed(2)}`;
+            message += `\nTotal: ₦${total.toFixed(2)}`;
             
             if (instructions) {
                 message += `\n\nSpecial Instructions:\n${instructions}`;

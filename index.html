@@ -61,6 +61,30 @@
             align-items: center;
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0; /* Enable flexbox shrinking */
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex-shrink: 0; /* Prevent logo from shrinking */
+        }
+        
+        .restaurant-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0; /* Enable text truncation */
+        }
+
+
         .announcement-banner {
             position: fixed;
             top: var(--header-height);

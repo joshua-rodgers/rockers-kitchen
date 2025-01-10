@@ -30,7 +30,7 @@
             --text-secondary: #a0a0a0;
             --border: #333333;
             --shadow: rgba(0,0,0,0.3);
-            --announcement: #2563eb;
+            --announcement: #00D569;
         }
 
         * {
@@ -84,6 +84,19 @@
             min-width: 0; /* Enable text truncation */
         }
 
+        .theme-toggle {
+            margin-right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
 
         .announcement-banner {
             position: fixed;
@@ -326,7 +339,7 @@
             <h1 style="font-size: 1.2rem;">Rocker's Kitchen</h1>
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <button onclick="toggleTheme()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">
+            <button class="theme-toggle" onclick="toggleTheme()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">
                 🌙
             </button>
             <div onclick="openCart()" style="cursor: pointer; position: relative;">

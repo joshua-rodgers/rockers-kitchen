@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        :root {
+            --background: #f5f5f5;
+            --surface: #ffffff;
+            --primary: #ff4646;
+            --text: #333333;
+            --text-secondary: #666666;
+            --border: #eeeeee;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #121212;
+            --surface: #1e1e1e;
+            --primary: #ff6b6b;
+            --text: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: #333333;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            padding: 1rem;
+            box-shadow: 0 2px 4px var(--shadow);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0; /* Enable flexbox shrinking */
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex-shrink: 0; /* Prevent logo from shrinking */
+        }
+        
+        .restaurant-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0; /* Enable text truncation */
+        }
+
+        .theme-toggle {
+            margin-right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4646;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .menu-container {
+            margin-top: 70px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding-bottom: 2rem;
+        }
+
+        .menu-item {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-info {
+            padding: 1rem;
+        }
+
+        .menu-item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item-price {
+            font-weight: 600;
+            color: #ff4646;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            overflow: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .options-list {
+            margin: 1rem 0;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+
+        .add-to-cart {
+            background: #ff4646;
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .add-to-cart:active {
+            transform: scale(0.98);
+        }
+
+        .cart-modal .modal-content {
+            padding: 1rem;
+        }
+
+        .cart-items {
+            margin: 1rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .checkout-form {
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 4px;
+        }
+
+        .checkout-button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Restaurant Logo" class="logo">
+            <h1 class="restaurant-name">Rocker's Kitchen</h1>
+        </div>
+        <div style="display: flex; align-items: center;">
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                🌙
+            </button>
+            <div class="cart-icon" onclick="openCart()">
+                🛒
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container" id="menu-container">
+        <!-- Menu items will be inserted here by JavaScript -->
+    </main>
+
+    <!-- Item Detail Modal -->
+    <div class="modal" id="item-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('item-modal')">×</button>
+            <div class="modal-body" id="item-modal-content">
+                <!-- Item details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('cart-modal')">×</button>
+            <div class="modal-body">
+                <h2>Your Order</h2>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be inserted here -->
+                </div>
+                <div class="checkout-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Special Instructions</label>
+                        <textarea id="instructions" rows="3"></textarea>
+                    </div>
+                    <button class="checkout-button" onclick="checkout()">
+                        Complete Order on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample menu data - replace with your actual menu items
+        const menuItems = [
+            {
+                id: 1,
+                name: "Classic Burger",
+                description: "Juicy beef patty with fresh lettuce, tomatoes, and our special sauce",
+                price: 12.99,
+                image: "images/burger.png",
+                options: [
+                    { name: "Extra cheese", price: 1.50 },
+                    { name: "Bacon", price: 2.00 },
+                    { name: "Avocado", price: 1.50 }
+                ]
+            },
+            {
+                id: 2,
+                name: "Margherita Pizza",
+                description: "Fresh mozzarella, tomatoes, and basil on our homemade crust",
+                price: 14.99,
+                image: "images/pizza.png",
+                options: [
+                    { name: "Extra cheese", price: 2.00 },
+                    { name: "Mushrooms", price: 1.50 },
+                    { name: "Pepperoni", price: 2.00 }
+                ]
+            }
+        ];
+
+        const cart = [];
+        const WHATSAPP_NUMBER = "1234567890"; // Replace with actual WhatsApp number
+
+        // Render menu items
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = menuItems.map(item => `
+                <div class="menu-item" onclick="showItemDetail(${item.id})">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="menu-item-info">
+                        <div class="menu-item-title">${item.name}</div>
+                        <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show item detail modal
+        function showItemDetail(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            const modal = document.getElementById('item-modal');
+            const content = document.getElementById('item-modal-content');
+            
+            content.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <h2>${item.name}</h2>
+                <p>${item.description}</p>
+                <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                <div class="options-list">
+                    ${item.options.map(option => `
+                        <div class="option-item">
+                            <input type="checkbox" id="option-${option.name}" data-price="${option.price}">
+                            <label for="option-${option.name}">
+                                ${option.name} (+$${option.price.toFixed(2)})
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="add-to-cart" onclick="addToCart(${item.id})">
+                    Add to Cart
+                </button>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        // Add item to cart
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            const selectedOptions = Array.from(document.querySelectorAll('.option-item input:checked'))
+                .map(input => ({
+                    name: input.id.replace('option-', ''),
+                    price: parseFloat(input.dataset.price)
+                }));
+            
+            cart.push({
+                ...item,
+                selectedOptions
+            });
+            
+            updateCartCount();
+            closeModal('item-modal');
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        // Open cart modal
+        function openCart() {
+            const modal = document.getElementById('cart-modal');
+            const cartItems = document.getElementById('cart-items');
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div>
+                        ${item.name}
+                        ${item.selectedOptions.map(option => `
+                            <br><small>+ ${option.name}</small>
+                        `).join('')}
+                    </div>
+                    <div>
+                        $${(item.price + item.selectedOptions.reduce((sum, opt) => sum + opt.price, 0)).toFixed(2)}
+                    </div>
+                </div>
+            `).join('');
+            
+            modal.style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Checkout - generate WhatsApp message
+        function checkout() {
+            const name = document.getElementById('name').value;
+            const instructions = document.getElementById('instructions').value;
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            let message = `New Order from ${name}\n\n`;
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price + item.selectedOptions.reduce((sum, opt) => sum + opt.price, 0);
+                total += itemTotal;
+                
+                message += `${item.name} - $${itemTotal.toFixed(2)}\n`;
+                item.selectedOptions.forEach(option => {
+                    message += `  + ${option.name}\n`;
+                });
+                message += '\n';
+            });
+            
+            message += `\nTotal: $${total.toFixed(2)}`;
+            
+            if (instructions) {
+                message += `\n\nSpecial Instructions:\n${instructions}`;
+            }
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        }
+
+        // Theme toggling
+        function toggleTheme() {
+            const body = document.documentElement;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (isDark) {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize
+        renderMenu();
+        
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle').innerHTML = '☀️';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
